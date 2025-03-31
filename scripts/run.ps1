@@ -1,4 +1,3 @@
-...
 $env:AMBULANCE_API_PORT="8080"
 $env:AMBULANCE_API_MONGODB_USERNAME="root"
 $env:AMBULANCE_API_MONGODB_PASSWORD="neUhaDnes"
@@ -22,6 +21,9 @@ switch ($command) {
     "test" {
         go test -v ./...
     }
+    "docker" {
+         docker build -t bartalos86/ambulance-wl-webapi:local-build -f ${ProjectRoot}/build/docker/Dockerfile .
+   }
     "mongo" {
         mongo up
     }
