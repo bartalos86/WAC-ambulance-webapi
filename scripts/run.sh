@@ -8,7 +8,7 @@ fi
 # Get the directory of the script and its parent
 ScriptDir="$(cd "$(dirname "$0")" && pwd)"
 ProjectRoot="$(dirname "$ScriptDir")"
-export AMBULANCE_API_ENVIRONMENT="Development"
+# export AMBULANCE_API_ENVIRONMENT="Development"
 export AMBULANCE_API_PORT="8080"
 export AMBULANCE_API_MONGODB_USERNAME="root"
 export AMBULANCE_API_MONGODB_PASSWORD="neUhaDnes"

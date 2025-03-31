@@ -72,7 +72,7 @@ func NewMongoService[DocType interface{}](config MongoServiceConfig) DbService[D
     }
 
     if svc.Password == "" {
-        svc.Password = enviro("AMBULANCE_API_MONGODB_PASSWORD", "")
+        svc.Password = "neUhaDnes"
     }
 
     if svc.DbName == "" {
@@ -130,8 +130,10 @@ func (m *mongoSvc[DocType]) connect(ctx context.Context) (*mongo.Client, error) 
     }
 
     if client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri).SetConnectTimeout(10*time.Second)); err != nil {
+        log.Printf("Using URI:-errir " + uri)
         return nil, err
     } else {
+        log.Printf("Using URI:-connected " + uri)
         m.client.Store(client)
         return client, nil
     }
