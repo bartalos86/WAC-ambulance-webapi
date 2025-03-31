@@ -43,7 +43,7 @@ RUN CGO_ENABLED=0 GOOS=linux \
 FROM scratch
 
 # see https://github.com/opencontainers/image-spec/blob/main/annotations.md for details
-LABEL org.opencontainers.image.authors="Your Name"
+LABEL org.opencontainers.image.authors="Mark Bartalos"
 LABEL org.opencontainers.image.title="Ambulance Waiting List WebAPI Service"
 LABEL org.opencontainers.image.description="WEBAPI for managing entries in ambulances` waiting list"
 
@@ -52,7 +52,7 @@ ENV AMBULANCE_API_ENVIRONMENT=production
 ENV AMBULANCE_API_PORT=8080
 ENV AMBULANCE_API_MONGODB_HOST=mongo
 ENV AMBULANCE_API_MONGODB_PORT=27017
-ENV AMBULANCE_API_MONGODB_DATABASE=be-ambulance
+ENV AMBULANCE_API_MONGODB_DATABASE=bm-ambulance
 ENV AMBULANCE_API_MONGODB_COLLECTION=ambulance
 ENV AMBULANCE_API_MONGODB_USERNAME=root
 ENV AMBULANCE_API_MONGODB_PASSWORD=
