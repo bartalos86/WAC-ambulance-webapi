@@ -22,7 +22,7 @@ switch ($command) {
         go test -v ./...
     }
     "docker" {
-         docker build -t bartalos86/ambulance-wl-webapi:local-build -f ${ProjectRoot}/build/docker/Dockerfile .
+        docker build -t bartalos86/ambulance-wl-webapi:local-build -f ${ProjectRoot}/build/docker/Dockerfile .
    }
     "mongo" {
         mongo up
