@@ -12,8 +12,10 @@ import (
 	"github.com/bartalos86/WAC-ambulance-webapi/internal/db_service"
 	"github.com/stretchr/testify/suite"
 
-	  "github.com/rs/zerolog"
+	"github.com/rs/zerolog"
   "go.opentelemetry.io/otel/trace/noop"
+	metricNoop "go.opentelemetry.io/otel/metric/noop"
+
 )
 
 type AmbulanceWlSuite struct {
@@ -103,6 +105,9 @@ func (suite *AmbulanceWlSuite) Test_UpdateWl_DbServiceUpdateCalled() {
     sut := implAmbulanceWaitingListAPI{
 			tracer: noop.NewTracerProvider().Tracer("ambulance-wl"),
 			logger: zerolog.Nop(),
+			entriesCreatedCounter: metricNoop.Int64Counter{},
+			entriesUpdatedCounter: metricNoop.Int64Counter{},
+			entriesDeletedCounter: metricNoop.Int64Counter{},
 		}
     // ACT
 		sut.UpdateWaitingListEntry(ctx)

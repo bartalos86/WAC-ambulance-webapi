@@ -12,6 +12,12 @@ import (
     "github.com/gin-contrib/cors"
 		"github.com/rs/zerolog"
   	"github.com/rs/zerolog/log"
+    "go.opentelemetry.io/contrib/exporters/autoexport"
+    "go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
+    "go.opentelemetry.io/otel"
+    "go.opentelemetry.io/otel/propagation"
+    tracesdk "go.opentelemetry.io/otel/sdk/trace"
+    metricsdk "go.opentelemetry.io/otel/sdk/metric"
 )
 
 func main() {
@@ -31,6 +37,28 @@ func main() {
   }
   // Set the global log level
   zerolog.SetGlobalLevel(level)
+
+    // initialize trace exporter
+  ctx, cancel := context.WithCancel(context.Background())
+  defer cancel()
+  traceExporter, err := autoexport.NewSpanExporter(ctx)
+  if err != nil {
+    log.Fatal().Err(err).Msg("Failed to initialize trace exporter")
+  }
+  traceProvider := tracesdk.NewTracerProvider(tracesdk.WithBatcher(traceExporter))
+  otel.SetTracerProvider(traceProvider)
+  otel.SetTextMapPropagator(propagation.TraceContext{})
+  defer  traceProvider.Shutdown(ctx)
+
+    // initialize metric exporter
+  metricReader, err := autoexport.NewMetricReader(ctx)
+  if err != nil {
+    log.Fatal().Err(err).Msg("Failed to initialize metric reader")
+  }
+  metricProvider := metricsdk.NewMeterProvider(metricsdk.WithReader(metricReader))
+  otel.SetMeterProvider(metricProvider)
+  defer metricProvider.Shutdown(ctx)
+
 
   log.Info().Msg("Server started")
     log.Printf("Server started")
@@ -53,6 +81,7 @@ func main() {
 			MaxAge: 12 * time.Hour,
 		})
 		engine.Use(corsMiddleware)
+    engine.Use(otelgin.Middleware("ambulance-webapi"))
 		    // setup context update  middleware
 		dbService := db_service.NewMongoService[ambulance_wl.Ambulance](db_service.MongoServiceConfig{})
 		defer dbService.Disconnect(context.Background())
